@@ -1,16 +1,12 @@
-const users = require("../data/users");
+// const users = require("../data/users");
 const createUser = async (req, res) => {
-  const user = users.some((element) => {
-    if (req.body.email === element.email) {
-      return element;
-    }
+  const { name, email, password, about } = req.body;
+  const user = new UserModel({
+    name,
+    email,
+    password,
+    about,
   });
-  if (user) {
-    res.status(400).send({ message: "User Already Existed" });
-    return;
-  }
-  users.push(req.body);
-  res.send({ message: "user registered succesfully" });
 };
 
 const getallusers = async (req, res) => {
