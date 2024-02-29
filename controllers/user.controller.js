@@ -1,26 +1,51 @@
 // const users = require("../data/users");
+const userModel = require("../modles/user.model");
 const createUser = async (req, res) => {
   const { name, email, password, about } = req.body;
-  const user = new UserModel({
+  const user = new userModel({
     name,
     email,
     password,
     about,
   });
+  user
+    .save()
+    .then((data) => {
+      if (!data) {
+        res.status(400).send({ message: "User not created" });
+      }
+      res.status(200).send({ message: "user registered successfully" });
+    })
+    .catch((e) => {
+      res.send({ message: e.message || "Some Error occured" });
+    });
 };
 
 const getallusers = async (req, res) => {
-  res.send(users);
+  userModel
+    .find()
+    .select("name email updated created")
+    .then((data) => {
+      if (!data) {
+        res.status(400).send({ message: "No users" });
+      }
+      res.status(200).send(data);
+    });
 };
 
 const getuser = async (req, res) => {
-  const user = users.some((element) => {
-    if (element.email === req.params.userid) {
-      return res.send(element);
-    } else {
-      res.send({ message: "User not found" });
-    }
-  });
+  const id = req.params.userid;
+  userModel
+    .findById(id)
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({ message: "user not found" });
+      }
+      res.status(200).send(data);
+    })
+    .catch((e) => {
+      res.send({ message: e.message });
+    });
 };
 
 const updateuser = async (req, res) => {
