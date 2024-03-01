@@ -1,11 +1,12 @@
 // const users = require("../data/users");
 const userModel = require("../modles/user.model");
+const bcrypt = require("bcrypt");
 const createUser = async (req, res) => {
   const { name, email, password, about } = req.body;
   const user = new userModel({
     name,
     email,
-    password,
+    password: bcrypt.hashSync(password, 10),
     about,
   });
   user
