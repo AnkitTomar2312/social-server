@@ -1,6 +1,7 @@
 const userModel = require("../modles/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const config = require("../config/config");
 const login = async (req, res) => {
   const { email, password } = req.body;
   userModel
@@ -13,7 +14,7 @@ const login = async (req, res) => {
       if (!isPasswordValid) {
         return res.status(404).send({ message: "password not valid" });
       }
-      let token = jwt.sign({ id: data._id }, "abcdefgh");
+      let token = jwt.sign({ id: data._id }, config.secretkey);
       return res.send({
         user: {
           id: data._id,
