@@ -76,4 +76,65 @@ const deleteuser = (req, res) => {
     return;
   }
 };
-module.exports = { createUser, getallusers, getuser, updateuser, deleteuser };
+
+const addFollowing = (req, res, next) => {
+  userModel
+    .findByIdAndUpdate(req.body.userid, {
+      $push: { following: req.body.followId },
+    })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({ message: "User not found" });
+      }
+      next();
+    })
+    .catch((e) => {
+      res.send({ message: e.message });
+    });
+};
+
+// const addFollower = (req, res) => {
+//   userModel
+//     .findByIdAndUpdate(req.body.followId, {
+//       $push: { followers: req.body.userid },
+//     })
+//     .then((data) => {
+//       if (!data) {
+//         res.status(404).send({ message: "User not found" });
+//       }
+//       res.status(200).send(data);
+//     })
+//     .catch((e) => {
+//       res.send({ message: e.message });
+//     });
+// };
+
+const addFollower = async (req, res) => {
+  userModel
+    .findByIdAndUpdate(
+      req.body.followId,
+      { $push: { followers: req.body.userid } },
+      { new: true }
+    )
+    .populate("following", "name")
+    .populate("followers", "name")
+    .exec()
+    .then((data) => {
+      if (!data) {
+        return res.status(404).send({ message: "User not found" });
+      }
+      res.status(200).send(data);
+    })
+    .catch((e) => {
+      res.send({ message: e.message || "Could not retrieve the user" });
+    });
+};
+module.exports = {
+  createUser,
+  getallusers,
+  getuser,
+  updateuser,
+  deleteuser,
+  addFollowing,
+  addFollower,
+};
