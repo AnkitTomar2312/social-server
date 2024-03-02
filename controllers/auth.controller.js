@@ -1,6 +1,6 @@
 const userModel = require("../modles/user.model");
 const bcrypt = require("bcrypt");
-
+const jwt = require("jsonwebtoken");
 const login = async (req, res) => {
   const { email, password } = req.body;
   userModel
@@ -13,7 +13,15 @@ const login = async (req, res) => {
       if (!isPasswordValid) {
         return res.status(404).send({ message: "password not valid" });
       }
-      return res.status(200).send({ message: "Logged in succesfully" });
+      let token = jwt.sign({ id: data._id }, "abcdefgh");
+      return res.send({
+        user: {
+          id: data._id,
+          email: data.email,
+          name: data.name,
+        },
+        accessToken: token,
+      });
     })
     .catch((e) => {
       return res.send({ message: e.message });
