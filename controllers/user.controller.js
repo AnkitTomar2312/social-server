@@ -129,6 +129,42 @@ const addFollower = async (req, res) => {
       res.send({ message: e.message || "Could not retrieve the user" });
     });
 };
+
+const removeFollowing = (req, res, next) => {
+  userModel
+    .findByIdAndUpdate(req.body.userid, {
+      $pull: { following: req.body.followId },
+    })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({ message: "User not found" });
+      }
+      next();
+      // res.status(200).send({ message: "User unfollowed" });
+    })
+    .catch((e) => {
+      res.send({ message: e.message });
+    });
+};
+
+const removeFollower = async (req, res) => {
+  userModel
+    .findByIdAndUpdate(
+      req.body.followId,
+      { $pull: { followers: req.body.userid } },
+      { new: true }
+    )
+    .then((data) => {
+      if (!data) {
+        return res.status(404).send({ message: "User not found" });
+      }
+      res.status(200).send(data);
+    })
+    .catch((e) => {
+      res.send({ message: e.message || "Could not retrieve the user" });
+    });
+};
+
 module.exports = {
   createUser,
   getallusers,
@@ -137,4 +173,6 @@ module.exports = {
   deleteuser,
   addFollowing,
   addFollower,
+  removeFollowing,
+  removeFollower,
 };

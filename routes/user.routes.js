@@ -12,6 +12,13 @@ router.put(
   userCtrl.addFollower
 );
 
+router.delete(
+  "/api/users/follow",
+  authMiddleware.verifyToken,
+  userCtrl.removeFollowing,
+  userCtrl.removeFollower
+);
+
 router
   .route("/api/users/:userid")
   .get(authMiddleware.verifyToken, userCtrl.getuser);
