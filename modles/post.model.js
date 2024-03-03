@@ -4,6 +4,7 @@ const PostSchema = new mongoose.Schema({
   text: {
     type: Array,
     trim: true,
+    required: "Text is required",
   },
 
   photo: {
