@@ -1,4 +1,4 @@
-const PostModel = require("../models/post.model");
+const PostModel = require("../modles/post.model");
 const formidable = require("formidable");
 const fs = require("fs");
 
@@ -7,13 +7,14 @@ const createPost = (req, res) => {
   form.keepExtensions = true;
   form.parse(req, async (err, fields, files) => {
     if (err) {
-      return res.status(400).send({ message: "Image can;t be uploaded" });
+      return res.status(400).send({ message: "Image can't be uploaded" });
     }
 
     let post = new PostModel(fields);
     post.postedBy = req.user;
     if (files.photo) {
-      post.photo.data = fs.readFileSync(files.photo.filepath);
+      console.log(files.photo[0]);
+      post.photo.data = fs.readFileSync(files.photo[0].filepath);
       post.photo.contentType = files.photo.type;
     }
     post
@@ -26,7 +27,8 @@ const createPost = (req, res) => {
         res.send(data);
       })
       .catch((e) => {
-        res.send({ message: e.message });
+        console.log(e.message);
+        res.send({ message: e.message || "Some error occured" });
       });
   });
 };
