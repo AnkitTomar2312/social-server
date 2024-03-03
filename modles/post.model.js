@@ -2,9 +2,8 @@ const mongoose = require("mongoose");
 
 const PostSchema = new mongoose.Schema({
   text: {
-    type: String,
+    type: Array,
     trim: true,
-    required: "Text is required",
   },
 
   photo: {
