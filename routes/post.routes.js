@@ -16,24 +16,24 @@ router
   .route("/api/posts/by/:userId")
   .get(authMiddleware.verifyToken, postCtrl.listByUser);
 
-// router
-//   .route("/api/posts/feed/:userId")
-//   .get(authMiddleware.verifyToken, postCtrl.listNewsFeed);
+router
+  .route("/api/posts/feed/:userId")
+  .get(authMiddleware.verifyToken, postCtrl.listNewsFeed);
+// postCtrl.isPoster,
+router
+  .route("/api/posts/:postId")
+  .delete(authMiddleware.verifyToken, postCtrl.remove);
 
-// router.route("/api/posts/like").put(authMiddleware.verifyToken, postCtrl.like);
-// router
-//   .route("/api/posts/unlike")
-//   .put(authMiddleware.verifyToken, postCtrl.unlike);
+router.route("/api/posts/like").put(authMiddleware.verifyToken, postCtrl.like);
+router
+  .route("/api/posts/unlike")
+  .put(authMiddleware.verifyToken, postCtrl.unlike);
 
-// router
-//   .route("/api/posts/comment")
-//   .put(authMiddleware.verifyToken, postCtrl.comment);
+router
+  .route("/api/posts/comment")
+  .put(authMiddleware.verifyToken, postCtrl.comment);
 // router
 //   .route("/api/posts/uncomment")
 //   .put(authMiddleware.verifyToken, postCtrl.uncomment);
-
-// router
-//   .route("/api/posts/:postId")
-//   .delete(authMiddleware.verifyToken, postCtrl.isPoster, postCtrl.remove);
 
 module.exports = router;
