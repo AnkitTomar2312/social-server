@@ -48,33 +48,36 @@ const getuser = async (req, res) => {
       res.send({ message: e.message });
     });
 };
+const updateuser = (req, res) => {
+  const id = req.params.userid;
+  userModel
+    .findByIdAndUpdate(id, req.body)
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({ message: "User not found" });
+      }
 
-const updateuser = async (req, res) => {
-  const index = users.findIndex((element) => {
-    return element.email === req.params.userid;
-  });
-  if (index === -1) {
-    res.send({ message: "User not found" });
-  } else {
-    req.body.name ? (users[index].name = req.body.name) : "";
-    req.body.email ? (users[index].email = req.body.email) : "";
-    req.body.passwrod ? (users[index].passwrod = req.body.passwrod) : "";
-  }
-  res.send({ message: "Profile updated" });
+      res.send({ message: "User Updated" });
+    })
+    .catch((e) => {
+      res.send({ message: e.message });
+    });
 };
 
 const deleteuser = (req, res) => {
-  const index = users.findIndex((user) => {
-    return user.email === req.params.userid;
-  });
-  if (index === -1) {
-    res.send({ message: "User not found" });
-    return;
-  } else {
-    users.splice(index, 1);
-    res.send({ message: "User deleted" });
-    return;
-  }
+  const id = req.params.userid;
+  userModel
+    .findByIdAndDelete(id)
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({ message: "User not found" });
+      }
+
+      res.send({ message: "User Deleted" });
+    })
+    .catch((e) => {
+      res.send({ message: e.message });
+    });
 };
 
 const addFollowing = (req, res, next) => {
