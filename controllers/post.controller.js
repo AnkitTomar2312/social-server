@@ -33,4 +33,33 @@ const createPost = (req, res) => {
   });
 };
 
-module.exports = { createPost };
+const photo = (req, res) => {
+  const id = req.params.postId;
+  PostModel.findById(id)
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({ message: "post not found" });
+      }
+      PostPhoto = data.photo;
+      res.status(200).send(PostPhoto);
+    })
+    .catch((e) => {
+      res.send({ message: e.message });
+    });
+};
+
+const listByUser = (req, res) => {
+  const id = req.params.userId;
+  PostModel.findById(id)
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({ message: "Nothing to show" });
+      }
+      res.status(200).send(data);
+    })
+    .catch((e) => {
+      res.send({ message: e.message });
+    });
+};
+
+module.exports = { createPost, photo, listByUser };

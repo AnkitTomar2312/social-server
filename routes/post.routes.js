@@ -10,11 +10,11 @@ router.post(
   postCtrl.createPost
 );
 
-//router.route("/api/posts/photo/:postId").get(postCtrl.photo);
+router.route("/api/posts/photo/:postId").get(postCtrl.photo);
 
-// router
-//   .route("/api/posts/by/:userId")
-//   .get(authMiddleware.verifyToken, postCtrl.listByUser);
+router
+  .route("/api/posts/by/:userId")
+  .get(authMiddleware.verifyToken, postCtrl.listByUser);
 
 // router
 //   .route("/api/posts/feed/:userId")

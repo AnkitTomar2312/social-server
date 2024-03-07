@@ -14,8 +14,8 @@ router.put(
   userCtrl.addFollower
 );
 
-router.delete(
-  "/api/users/follow",
+router.put(
+  "/api/users/unfollow",
   authMiddleware.verifyToken,
   userCtrl.removeFollowing,
   userCtrl.removeFollower
