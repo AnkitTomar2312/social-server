@@ -7,6 +7,9 @@ router.route("/api/users/register").post(userCtrl.createUser);
 
 router.route("/api/users").get(userCtrl.getallusers);
 
+router.get("/api/users/photo/:userId");
+router.get("/api/photo/defaultphoto");
+
 router.put(
   "/api/users/follow",
   authMiddleware.verifyToken,
