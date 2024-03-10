@@ -34,20 +34,39 @@ const createPost = (req, res) => {
   });
 };
 
+// const photo = (req, res) => {
+//   const id = req.params.postId;
+//   PostModel.findById(id)
+//     .then((data) => {
+//       if (!data) {
+//         res.status(404).send({ message: "post not found" });
+//       }
+//       PostPhoto = data.photo;
+//       res.status(200).send(PostPhoto);
+//     })
+//     .catch((e) => {
+//       res.send({ message: e.message });
+//     });
+// };
+
 const photo = (req, res) => {
   const id = req.params.postId;
   PostModel.findById(id)
     .then((data) => {
       if (!data) {
         res.status(404).send({ message: "post not found" });
+      } else {
+        const photoData = data.photo;
+        res.setHeader("Content-Type", "image/png");
+
+        res.status(200).send(photoData.data);
       }
-      PostPhoto = data.photo;
-      res.status(200).send(PostPhoto);
     })
     .catch((e) => {
-      res.send({ message: e.message });
+      res.status(500).send({ message: e.message });
     });
 };
+
 const listByUser = async (req, res) => {
   try {
     const id = req.params.userId;

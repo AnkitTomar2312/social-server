@@ -10,6 +10,11 @@ router.route("/api/users").get(userCtrl.getallusers);
 router.get("/api/users/photo/:userId");
 router.get("/api/photo/defaultphoto");
 
+// router.route('/api/users/photo/:userId')
+//   .get(userCtrl.photo, userCtrl.defaultPhoto)
+// router.route('/api/users/defaultphoto')
+//   .get(userCtrl.defaultPhoto)
+
 router.put(
   "/api/users/follow",
   authMiddleware.verifyToken,
@@ -23,6 +28,10 @@ router.put(
   userCtrl.removeFollowing,
   userCtrl.removeFollower
 );
+
+router
+  .route("/api/users/findpeople/:userId")
+  .get(authMiddleware.verifyToken, userCtrl.findPeople);
 
 router
   .route("/api/users/:userid")

@@ -82,7 +82,7 @@ const deleteuser = (req, res) => {
 
 const addFollowing = (req, res, next) => {
   userModel
-    .findByIdAndUpdate(req.body.userid, {
+    .findByIdAndUpdate(req.body.userId, {
       $push: { following: req.body.followId },
     })
     .then((data) => {
@@ -116,7 +116,7 @@ const addFollower = async (req, res) => {
   userModel
     .findByIdAndUpdate(
       req.body.followId,
-      { $push: { followers: req.body.userid } },
+      { $push: { followers: req.body.userId } },
       { new: true }
     )
     .populate("following", "name")
@@ -135,7 +135,7 @@ const addFollower = async (req, res) => {
 
 const removeFollowing = (req, res, next) => {
   userModel
-    .findByIdAndUpdate(req.body.userid, {
+    .findByIdAndUpdate(req.body.userId, {
       $pull: { following: req.body.followId },
     })
     .then((data) => {
@@ -154,7 +154,7 @@ const removeFollower = async (req, res) => {
   userModel
     .findByIdAndUpdate(
       req.body.followId,
-      { $pull: { followers: req.body.userid } },
+      { $pull: { followers: req.body.userId } },
       { new: true }
     )
     .then((data) => {
@@ -168,6 +168,21 @@ const removeFollower = async (req, res) => {
     });
 };
 
+const findPeople = async (req, res) => {
+  let following = req.params.userId;
+  // following.push(req.profile._id);
+  try {
+    let users = await userModel
+      .find({ _id: { $nin: following } })
+      .select("name");
+    res.json(users);
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err),
+    });
+  }
+};
+
 module.exports = {
   createUser,
   getallusers,
@@ -178,4 +193,5 @@ module.exports = {
   addFollower,
   removeFollowing,
   removeFollower,
+  findPeople,
 };
